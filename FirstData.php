@@ -266,6 +266,19 @@ class FirstData
 	 */
 	public function setCreditCardVerification($cvv) {
 		$this->setPostData('cc_verification_str2', $cvv);
+		$this->setPostData('cvd_presence_ind', 1);
+		return $this;
+	}
+	/**
+	 * set credit card cavv code
+	 * This is the 0, 3, or 4-digit code on the back of the credit card sometimes called the CVV2 or CVD value.
+	 *
+	 * used for verification
+	 * @param int $cvv
+	 * @return object
+	 */
+	public function setCreditCardCAVV($cavv) {
+		$this->setPostData('cavv', $cavv);
 		return $this;
 	}
 	/**
@@ -396,6 +409,11 @@ class FirstData
 		if($this->getBankResponseType() && $this->getBankResponseType() != 'S') {
 			return true;
 		}
+
+		// exact response type
+		if($this->getExactResponseCode() > 0) {
+			return true;
+		}
 		
 		// No error
 		return false;
@@ -449,6 +467,20 @@ class FirstData
 	 */
 	public function getBankResponseMessage() {
 		return $this->getValueByKey($this->getArrayResponse(), 'bank_message');
+	}
+	/**
+	 * Get transaction Exact response code
+	 * @return int
+	 */
+	public function getExactResponseCode() {
+		return $this->getValueByKey($this->getArrayResponse(), 'exact_resp_code');
+	}
+	/**
+	 * Get transaction Exact response message
+	 * @return string
+	 */
+	public function getExactResponseMessage() {
+		return $this->getValueByKey($this->getArrayResponse(), 'exact_message');
 	}
 	/**
 	 * Get transaction bank response comment
