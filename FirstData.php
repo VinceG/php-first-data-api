@@ -299,7 +299,7 @@ class FirstData
 	 * @return object
 	 */
 	public function setCurrency($code) {
-		$this->setPostData('currency_code', $zip);
+		$this->setPostData('currency_code', $code);
 		return $this;
 	}
 	/**
