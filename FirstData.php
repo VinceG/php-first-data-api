@@ -71,7 +71,7 @@ class FirstData
 	    CURLOPT_FRESH_CONNECT  => 1,
 		CURLOPT_PORT		   => 443,
 	    CURLOPT_USERAGENT      => 'curl-php',
-	    CURLOPT_FOLLOWLOCATION => true,
+	    CURLOPT_FOLLOWLOCATION => false,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_CUSTOMREQUEST  => 'POST',
 		CURLOPT_HTTPHEADER	   => array('Content-Type: application/json; charset=UTF-8;','Accept: application/json' ),
