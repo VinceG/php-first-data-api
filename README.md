@@ -3,18 +3,52 @@ First Data Global Gateway PHP API Service
 
 <a href='https://twitter.com/gabrielva' target='_blank'>Follow @gabrielva</a>
 
-PHP Wrapper to post api calls to the first data payment processor.
+This component provides a PHP Wrapper to post api calls to the First Data payment processor.
 
-Supports all transcation types.
-Supports Transarmor Token for charging credit cards more than once without storing the actual card number. 
+It requires curl and the php curl extension.
 
-Documentation:
-https://firstdata.zendesk.com/entries/407571-First-Data-Global-Gateway-e4-Web-Service-API-Reference-Guide
+## Features:
+* Supports all transaction types.
+* Supports Transarmor Token for charging credit cards more than once without storing the actual card number. 
 
-Examples:
+## Installation
+This library is now installable using <a href='http://getcomposer.org'>Composer</a>
+
+Add this to your project composer.json:
+
+```
+	"require": {
+        "vinceg/firstdataapi": "dev-master"
+	},
+```
+
+To use the component, use it:
+
+```php
+<?php
+use VinceG\FirstDataApi\FirstData;
+
+//
+// 3rd Parameter sets debug mode on.  
+// In debug mode, the demo gateway is used.  
+// You will need to create a demo gateway account with First Data
+// 
+$firstData = new FirstData(API_LOGIN, API_KEY, true);
+
+```
+
+## Documentation and Examples 
+### First Data Documentation:
+<a href='https://firstdata.zendesk.com/entries/407571-First-Data-Global-Gateway-e4-Web-Service-API-Reference-Guide'>Api Reference Guide</a>
+
+In these examples:
+* API_LOGIN is the Terminal Gateway ID of your commerce terminal.
+* API_KEY is the password you generate in the terminal screen.
 
 
-### Pre Auth
+### Examples:
+
+#### Pre Auth
 
 ```
 // Pre Auth Transaction Type
@@ -51,7 +85,7 @@ if($firstData->isError()) {
 }
 ```
 
-### Purchase
+#### Purchase
 
 ```
 // Purchase Transaction type
@@ -88,7 +122,7 @@ if($firstData->isError()) {
 }
 ```
 
-### Purchase with TransArmor Token
+#### Purchase with TransArmor Token
 
 ```
 // Purchase Transaction type
@@ -113,7 +147,7 @@ if($firstData->isError()) {
 }
 ```
 
-### Pre Auth Complete
+#### Pre Auth Complete
 
 ```
 // Purchase Transaction type
@@ -139,7 +173,7 @@ if($firstData->isError()) {
 }
 ```
 
-### Refund
+#### Refund
 
 ```
 // Purchase Transaction type
@@ -164,7 +198,7 @@ if($firstData->isError()) {
 }
 ```
 
-### Void
+#### Void
 
 ```
 // Purchase Transaction type
