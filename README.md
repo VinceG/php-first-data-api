@@ -22,7 +22,7 @@ Add this to your project composer.json:
 	},
 ```
 
-To use the component, use it:
+To use the component:
 
 ```php
 <?php
