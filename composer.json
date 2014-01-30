@@ -19,7 +19,7 @@
         "php": ">=5.3.3"
     },
     "autoload": {
-        "psr-0": { "VinceG\\FirstDataApi\\": ""}
+        "psr-0": { "VinceG\\FirstDataApi\\": "VinceG/FirstDataApi/src"}
     },
     "target-dir": "VinceG/FirstDataApi",
     "minimum-stability": "dev"
