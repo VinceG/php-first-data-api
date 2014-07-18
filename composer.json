@@ -16,10 +16,13 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "curl-ext": "*"
     },
     "autoload": {
-        "psr-0": { "VinceG\\FirstDataApi\\": "VinceG/FirstDataApi/src"}
+        "psr-0": {
+            "VinceG\\FirstDataApi\\": "VinceG/FirstDataApi/src"
+        }
     },
     "target-dir": "VinceG/FirstDataApi",
     "minimum-stability": "dev"
