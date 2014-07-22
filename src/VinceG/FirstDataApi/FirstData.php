@@ -330,8 +330,8 @@ class FirstData
 	 * @param string $number
 	 * @return object
 	 */
-	public function setCustomerNumber($number){
-		$this->setPostData('customer_number', $number);
+	public function setCustomerReferenceNumber($number){
+		$this->setPostData('customer_ref', $number);
 		return $this;
 	}
 	/**
