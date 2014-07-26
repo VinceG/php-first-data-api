@@ -196,7 +196,7 @@ class FirstData
 	 * @return object
 	 */
 	public function setCreditCardNumber($number) {
-		$this->setPostData('cc_number', $number);
+		$this->setPostData('cc_number', (string) $number);
 		return $this;
 	}
 	/**
