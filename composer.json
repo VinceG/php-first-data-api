@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "curl-ext": "*"
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-0": {
