@@ -325,6 +325,16 @@ class FirstData
 		return $this;
 	}
 	/**
+	 * set customerNumber
+	 *
+	 * @param string $number
+	 * @return object
+	 */
+	public function setCustomerReferenceNumber($number){
+		$this->setPostData('customer_ref', $number);
+		return $this;
+	}
+	/**
 	 * Perform the API call
 	 * @return string
 	 */
