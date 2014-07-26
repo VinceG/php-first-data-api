@@ -495,6 +495,13 @@ class FirstData
 		return $this->getValueByKey($this->getArrayResponse(), 'exact_message');
 	}
 	/**
+	 * Get the Address Verification System Response.
+	 * @return string
+	 */
+	public function getAvs() {
+		return $this->getValueByKey($this->getArrayResponse(), 'avs');
+	}
+	/**
 	 * Get transaction bank response comment
 	 * @return string
 	 */
