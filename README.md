@@ -181,7 +181,7 @@ $firstData = new FirstData(API_LOGIN, API_KEY, true);
 
 // Charge
 $firstData->setTransactionType(FirstData::TRAN_REFUND);
-$firstData->setCreditCardType($data['number'])
+$firstData->setCreditCardNumber($data['number'])
 		->setTransArmorToken($data['token'])
 		->setCreditCardName($data['name'])
 		->setCreditCardExpiration($data['exp'])
