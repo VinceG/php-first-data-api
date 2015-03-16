@@ -41,7 +41,7 @@ class FirstData
 	protected $errorCode = 0;
 	/**
 	 * the error message if one exists
-	 * @var string 
+	 * @var string
 	 */
 	protected $errorMessage = '';
 	/**
@@ -69,6 +69,16 @@ class FirstData
 	 * @var string
 	 */
 	protected $apiVersion = 'v11';
+	/**
+	 * The api key id needed for hmac headers
+	 * @var string
+	 */
+	protected $apiId = '';
+	/**
+	 * The api key needed for hmac headers
+	 * @var string
+	 */
+	protected $apiKey = '';
 	/**
 	 * @var boolean - set whether we are in a test mode or not
 	 */
@@ -123,16 +133,20 @@ class FirstData
 	/**
 	 * set the api username we are going to user
 	 * @param string $username - the api username
+	 * @return object
 	 */
 	public function setUsername($username) {
 		$this->username = $username;
+		return $this;
 	}
 	/**
 	 * set the api password we are going to user
 	 * @param string $username - the api password
+	 * @return object
 	 */
 	public function setPassword($password) {
 		$this->password = $password;
+		return $this;
 	}
 	/**
 	 * Return the post data fields as an array
@@ -161,14 +175,33 @@ class FirstData
 	/**
 	 * Set the api version we are going to use
 	 * @param string $version the new api version
-	 * @return void
+	 * @return object
 	 */
 	public function setApiVersion($version) {
 		$this->apiVersion = $version;
+		return $this;
+	}
+	/**
+	 * Set the api id we are going to use for hmac hash
+	 * @param string $id the new api id
+	 * @return object
+	 */
+	public function setApiId($id) {
+		$this->apiId = $id;
+		return $this;
+	}
+	/**
+	 * Set the api key we are going to use for hmac hash
+	 * @param string $key the new api key
+	 * @return object
+	 */
+	public function setApiKey($key) {
+		$this->apiKey = $key;
+		return $this;
 	}
 	/**
 	 * Set whether we are in a test mode or not
-	 * @param boolean $value 
+	 * @param boolean $value
 	 * @return void
 	 */
 	public function setTestMode($value) {
@@ -228,7 +261,7 @@ class FirstData
 	}
 	/**
 	 * set amount
-	 * @param int $amount
+	 * @param double $amount
 	 * @return object
 	 */
 	public function setAmount($amount) {
@@ -253,10 +286,10 @@ class FirstData
 		$this->setPostData('authorization_num', $number);
 		return $this;
 	}
-	
+
 	/**
 	 * set credit card address
-	 * VerificationStr1 is comprised of the following constituent address values: Street, Zip/Postal Code, City, State/Provence, Country.  
+	 * VerificationStr1 is comprised of the following constituent address values: Street, Zip/Postal Code, City, State/Provence, Country.
 	 * They are separted by the Pipe Character "|".
 	 *	Street Address|Zip/Postal|City|State/Prov|Country
 	 *
@@ -267,6 +300,16 @@ class FirstData
 	public function setCreditCardAddress($address) {
 		$this->setPostData('cc_verification_str1', $address);
 		return $this;
+	}
+
+	/**
+	 * set credit card address
+	 * used for verification, replaces the old cc_verification_str1 with the new address type
+	 * @param array $address
+	 * @return object
+	 */
+	public function setCreditCardAddressNew($address) {
+		$this->setPostData('address',$address);
 	}
 	/**
 	 * set credit card cvv code
@@ -314,6 +357,30 @@ class FirstData
 		$this->setPostData('currency_code', $code);
 		return $this;
 	}
+
+	/**
+	 * set client ip
+	 *
+	 * @param string $ip
+	 * @return object
+	 */
+	public function setClientIp($ip) {
+		$this->setPostData('client_ip', $ip);
+		return $this;
+	}
+
+	/**
+	 * set client email
+	 *
+	 * @param string $email
+	 * @return object
+	 */
+	public function setClientEmail($email) {
+		$this->setPostData('client_email', $email);
+		return $this;
+	}
+
+
 	/**
 	 * set reference number
 	 *
@@ -324,6 +391,18 @@ class FirstData
 		$this->setPostData('reference_no', $number);
 		return $this;
 	}
+
+	/**
+	 * set transaction tag
+	 *
+	 * @param int $number
+	 * @return object
+	 */
+	public function setTransactionTag($number) {
+		$this->setPostData('transaction_tag', $number);
+		return $this;
+	}
+
 	/**
 	 * set customerNumber
 	 *
@@ -353,10 +432,29 @@ class FirstData
     	if (!$ch) {
       		$ch = curl_init();
     	}
-		
-    	$opts = self::$CURL_OPTS;
-    	$opts[CURLOPT_POSTFIELDS] = json_encode(array_merge($this->getPostData(), array('gateway_id' => $this->username, 'password' => $this->password, 'transaction_type' => $this->transactionType)));
-    	$opts[CURLOPT_URL] = self::$testMode ? self::TEST_API_URL . $this->apiVersion : self::LIVE_API_URL . $this->apiVersion;
+		$opts = self::$CURL_OPTS;
+		$content = json_encode(array_merge($this->getPostData(), array('gateway_id' => $this->username, 'password' => $this->password, 'transaction_type' => $this->transactionType)));
+		$opts[CURLOPT_POSTFIELDS] = $content;
+		$opts[CURLOPT_URL] = self::$testMode ? self::TEST_API_URL . $this->apiVersion : self::LIVE_API_URL . $this->apiVersion;
+		if ($this->apiVersion >= 'v12') {
+			$gge4_date = gmdate('Y-m-d\TH:i:s') . 'Z'; // ISO8601
+			$content_digest = sha1($content);
+			$hmac = base64_encode(hash_hmac('sha1',
+				"POST\n" .
+				"application/json; charset=UTF-8;\n" .
+				$content_digest . "\n" .
+				$gge4_date . "\n" .
+				"/transaction/" . $this->apiVersion,
+				$this->apiKey, true));
+			$headers = array(
+				'X-GGe4-Content-SHA1: ' . $content_digest,
+				'X-GGe4-Date: ' . $gge4_date,
+				'Authorization: GGE4_API ' . $this->apiId . ':' . $hmac,
+				'Content-Length: ' . strlen($content)
+			);
+			$opts[CURLOPT_HTTPHEADER] = array_merge($opts[CURLOPT_HTTPHEADER], $headers);
+		}
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 		// set options
 		curl_setopt_array($ch, $opts);
@@ -402,7 +500,7 @@ class FirstData
 
 		// Reset
 		$this->postFields = array();
-		
+
 		return $this->getResponse();
     }
 	/**
@@ -416,12 +514,12 @@ class FirstData
 		if(!in_array($headers['http_code'], array(200, 201, 202))) {
 			return true;
 		}
-		
+
 		// Make sure the response does not have error in it
 		if(!$response || !count($response)) {
 			return true;
 		}
-		
+
 		// Do we have an error code
 		if($this->getErrorCode() > 0) {
 			return true;
@@ -436,12 +534,12 @@ class FirstData
 		if($this->getExactResponseCode() > 0) {
 			return true;
 		}
-		
+
 		// No error
 		return false;
 	}
 	/**
-	 * Was the last call successful 
+	 * Was the last call successful
 	 * @return boolean
 	 */
 	public function isSuccess() {
@@ -456,7 +554,15 @@ class FirstData
 		return $this->getValueByKey($this->getArrayResponse(), 'transaction_approved');
 	}
 	/**
-	 * Get transaction record/receipt 
+	 * Get Transaction Tag
+	 * @return int
+	 */
+	public function getTransactionTag() {
+		return $this->getValueByKey($this->getArrayResponse(), 'transaction_tag');
+	}
+
+	/**
+	 * Get transaction record/receipt
 	 * @return string
 	 */
 	public function getTransactionRecord() {
@@ -572,7 +678,7 @@ class FirstData
 	}
 	/**
 	 * Get the response data
-	 * 
+	 *
 	 * @return mixed the response data
 	 */
 	public function getResponse() {
@@ -590,7 +696,7 @@ class FirstData
 	}
 	/**
 	 * Get the headers
-	 * 
+	 *
 	 * @return array the headers returned from the call
 	 */
 	protected function getHeaders() {
@@ -608,7 +714,7 @@ class FirstData
 	}
 	/**
 	 * Get the error code number
-	 * 
+	 *
 	 * @return integer error code number
 	 */
 	public function getErrorCode() {
@@ -626,7 +732,7 @@ class FirstData
 	}
 	/**
 	 * Get the error code message
-	 * 
+	 *
 	 * @return string error code message
 	 */
 	public function getErrorMessage() {
@@ -652,7 +758,7 @@ class FirstData
 		  		}
 		 	}
 		}
-	
+
 		// Nothing matched
 		return null;
 	}
