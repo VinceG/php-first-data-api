@@ -490,9 +490,20 @@ class FirstData
 				$this->setErrorMessage($returnedMessage);
 			}
 		} else {
-			// We have a json string, empty error message
-			$this->setErrorMessage('');
-			$this->setErrorCode(0);
+			// for cases when exact_resp_code is 00, but bank response code is not successful
+			if ($this->isError()) {
+				$code = $this->getBankResponseCode();
+				$codes = $this->getBankResponseCodes();
+				$error = isset($codes[$code]) ? $codes[$code]['name'] : null;
+				
+				$this->setErrorMessage($error);
+				$this->setErrorCode(42);
+			}
+			else {
+				// We have a json string, empty error message
+				$this->setErrorMessage('');
+				$this->setErrorCode(0);
+			}
 		}
 
 		// close
