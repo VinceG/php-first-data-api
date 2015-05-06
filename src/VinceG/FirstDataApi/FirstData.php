@@ -241,6 +241,31 @@ class FirstData
 		$this->setPostData('credit_card_type', $type);
 		return $this;
 	}
+	
+	/**
+	 * Setting Track 1 and Track 2 data allows input from USB credit card swiper
+	 * For format of track data see: http://www.gae.ucm.es/~padilla/extrawork/magexam1.html
+	 * /
+	 
+	/**
+	 * set Track1 data
+	 * @param string $track
+	 * @return object
+	 */	
+        public function setTrack1($track) {
+                $this->setPostData('track1', $track);
+                return $this;
+        }	/**
+	 * set Track2 data
+	 * @param string $track
+	 * @return object
+	 */
+        
+        public function setTrack2($track) {
+                $this->setPostData('track2', $track;
+                return $this;
+        }
+	
 	/**
 	 * set credit card holder name
 	 * @param string $name
