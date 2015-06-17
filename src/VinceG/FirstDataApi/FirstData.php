@@ -262,7 +262,7 @@ class FirstData
 	 */
         
         public function setTrack2($track) {
-                $this->setPostData('track2', $track;
+                $this->setPostData('track2', $track);
                 return $this;
         }
 	
