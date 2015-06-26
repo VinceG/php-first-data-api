@@ -255,12 +255,13 @@ class FirstData
         public function setTrack1($track) {
                 $this->setPostData('track1', $track);
                 return $this;
-        }	/**
+        }
+        
+        /**
 	 * set Track2 data
 	 * @param string $track
 	 * @return object
 	 */
-        
         public function setTrack2($track) {
                 $this->setPostData('track2', $track);
                 return $this;
