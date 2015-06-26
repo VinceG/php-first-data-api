@@ -245,7 +245,7 @@ class FirstData
 	/**
 	 * Setting Track 1 and Track 2 data allows input from USB credit card swiper
 	 * For format of track data see: http://www.gae.ucm.es/~padilla/extrawork/magexam1.html
-	 * /
+	 */
 	 
 	/**
 	 * set Track1 data
@@ -262,7 +262,7 @@ class FirstData
 	 */
         
         public function setTrack2($track) {
-                $this->setPostData('track2', $track;
+                $this->setPostData('track2', $track);
                 return $this;
         }
 	
