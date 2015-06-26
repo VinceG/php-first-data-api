@@ -91,12 +91,12 @@ class FirstData
 	    CURLOPT_RETURNTRANSFER => true,
 	    CURLOPT_TIMEOUT        => 60,
 	    CURLOPT_FRESH_CONNECT  => 1,
-		CURLOPT_PORT		   => 443,
+	    CURLOPT_PORT   	   => 443,
 	    CURLOPT_USERAGENT      => 'curl-php',
 	    CURLOPT_FOLLOWLOCATION => false,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_CUSTOMREQUEST  => 'POST',
-		CURLOPT_HTTPHEADER	   => array('Content-Type: application/json; charset=UTF-8;','Accept: application/json' ),
+	    CURLOPT_RETURNTRANSFER => true,
+	    CURLOPT_CUSTOMREQUEST  => 'POST',
+	    CURLOPT_HTTPHEADER	   => array('Content-Type: application/json; charset=UTF-8;','Accept: application/json' ),
 	);
 
 	/**
